@@ -101,7 +101,11 @@ document.querySelectorAll('.label-row[data-img]').forEach(function(r){
   r.addEventListener('pointerenter',function(){ pv.querySelector('img').src=r.dataset.img; pv.classList.add('on'); });
   r.addEventListener('pointerleave',function(){ pv.classList.remove('on'); });
 });
-addEventListener('pointermove',function(e){ pv.style.left=(e.clientX+22)+'px'; pv.style.top=(e.clientY-80)+'px'; });
+addEventListener('pointermove',function(e){
+  var left=Math.min(e.clientX+30, innerWidth-262);
+  var top=e.clientY-196; if(top<88) top=e.clientY+34;
+  pv.style.left=Math.max(8,left)+'px'; pv.style.top=top+'px';
+});
 /* magnetic tickets */
 document.querySelectorAll('.big-ticket,.ticket-btn').forEach(function(b){
   b.addEventListener('pointermove',function(e){ var r=b.getBoundingClientRect();
