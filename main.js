@@ -29,6 +29,8 @@ document.querySelectorAll('.door,.wall-sec,.curators').forEach(function(sec){
     sec.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
   });
 });
+/* reveals — extended to headings and section furniture */
+document.querySelectorAll('.wall-head h2,.labels h2,.sec-t,.finale h2,.p-head h1,.p-head .lede,.plate,.stat,.manifesto .note p,.chip').forEach(function(el){ el.classList.add('reveal'); });
 /* reveals */
 var io=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } }); },{threshold:.12});
 document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
@@ -94,6 +96,10 @@ if(tag){ var inner=document.createElement('div'); inner.id='tagFlip';
   tag.insertBefore(inner,card); inner.appendChild(card); inner.appendChild(back);
   tag.style.cursor='pointer';
   tag.addEventListener('click',function(){ tag.classList.toggle('flipped'); });
+  tag.addEventListener('pointermove',function(e){ var r=tag.getBoundingClientRect();
+    inner.style.setProperty('--tx',(((e.clientX-r.left)/r.width)-.5)*14+'deg');
+    inner.style.setProperty('--ty',-(((e.clientY-r.top)/r.height)-.5)*10+'deg'); });
+  tag.addEventListener('pointerleave',function(){ inner.style.setProperty('--tx','0deg'); inner.style.setProperty('--ty','0deg'); });
 }
 /* service label hover preview (desktop) */
 var pv=document.createElement('div'); pv.id='svcPreview'; pv.innerHTML='<img alt="">'; document.body.appendChild(pv);
@@ -102,9 +108,9 @@ document.querySelectorAll('.label-row[data-img]').forEach(function(r){
   r.addEventListener('pointerleave',function(){ pv.classList.remove('on'); });
 });
 addEventListener('pointermove',function(e){
-  var left=Math.min(e.clientX+30, innerWidth-262);
-  var top=e.clientY-196; if(top<88) top=e.clientY+34;
-  pv.style.left=Math.max(8,left)+'px'; pv.style.top=top+'px';
+  /* pinned to the far-right gutter — the labels' titles never reach there */
+  pv.style.left=(innerWidth-258)+'px';
+  pv.style.top=Math.max(90,Math.min(innerHeight-176,e.clientY-80))+'px';
 });
 /* magnetic tickets */
 document.querySelectorAll('.big-ticket,.ticket-btn').forEach(function(b){
@@ -120,6 +126,30 @@ if(chip){
   var rio=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ var r=rooms.find(function(x){ return en.target.matches(x[0]); }); if(r) chip.innerHTML=r[1].replace('№','<em>№</em>'); } }); },{threshold:.35});
   rooms.forEach(function(r){ var el=document.querySelector(r[0]); el&&rio.observe(el); });
 }
+/* Lenis-style smooth scrolling — desktop pointers only, reduced-motion respected */
+var fine=matchMedia('(pointer:fine)').matches, calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(fine&&!calm){
+  var tY=scrollY, cY=scrollY, rolling=false;
+  function maxY(){ return document.documentElement.scrollHeight-innerHeight; }
+  function roll(){ var d=tY-cY; if(Math.abs(d)<.4){ cY=tY; scrollTo(0,cY); rolling=false; return; }
+    cY+=d*.085; scrollTo(0,cY); requestAnimationFrame(roll); }
+  addEventListener('wheel',function(e){
+    if(lb&&lb.classList.contains('open')) return;
+    if(e.ctrlKey) return;
+    e.preventDefault();
+    var dy=e.deltaMode===1? e.deltaY*33 : e.deltaY;
+    tY=Math.max(0,Math.min(maxY(),tY+dy));
+    if(!rolling){ rolling=true; cY=scrollY; requestAnimationFrame(roll); }
+  },{passive:false});
+  addEventListener('scroll',function(){ if(!rolling){ tY=scrollY; cY=scrollY; } },{passive:true});
+}
+/* custom cursor — dot that grows to VIEW over gallery cards */
+var cur2=document.createElement('div'); cur2.id='cursor'; document.body.appendChild(cur2);
+var cx=innerWidth/2, cy=innerHeight/2, tx2=cx, ty2=cy;
+addEventListener('pointermove',function(e){ tx2=e.clientX; ty2=e.clientY; });
+(function follow(){ cx+=(tx2-cx)*.2; cy+=(ty2-cy)*.2; cur2.style.left=cx+'px'; cur2.style.top=cy+'px'; requestAnimationFrame(follow); })();
+frames.forEach(function(f){ f.addEventListener('pointerenter',function(){ cur2.classList.add('view'); cur2.textContent='VIEW'; });
+  f.addEventListener('pointerleave',function(){ cur2.classList.remove('view'); cur2.textContent=''; }); });
 /* Hyderabad clock */
 var clk=document.getElementById('hydClock');
 function tickClock(){

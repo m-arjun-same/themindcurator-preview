@@ -166,7 +166,7 @@ nav.main-nav a.nl:hover::after{width:100%}
 
 /* ---------- footer ---------- */
 footer{background:var(--ink);color:var(--paper);padding:70px 0 34px;position:relative;overflow:hidden}
-.ft-word{font-family:var(--display);font-size:clamp(25px,6.2vw,86px);padding-right:.1em;line-height:1;text-transform:uppercase;color:transparent;-webkit-text-stroke:1.5px rgba(244,239,230,.5);white-space:nowrap}
+.ft-word{font-family:var(--display);font-size:clamp(21px,5.1vw,72px);padding-right:.1em;letter-spacing:-.02em;line-height:1;text-transform:uppercase;color:transparent;-webkit-text-stroke:1.5px rgba(244,239,230,.5);white-space:nowrap}
 .ft-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:36px;margin-top:52px}
 .ft-grid h4{font-size:11.5px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--pink);margin-bottom:16px}
 .ft-grid a{display:block;padding:4px 0;color:rgba(244,239,230,.85)}
@@ -206,16 +206,36 @@ footer{background:var(--ink);color:var(--paper);padding:70px 0 34px;position:rel
 #roomChip{position:fixed;left:18px;top:86px;z-index:800;background:var(--ink);color:var(--paper);font-size:11px;font-weight:600;letter-spacing:.24em;padding:10px 14px;border:1px solid rgba(244,239,230,.25);display:none}
 body.home #roomChip{display:block}
 #roomChip em{font-style:normal;color:var(--pink)}
-#tagFlip{transition:transform .7s cubic-bezier(.22,1,.36,1);transform-style:preserve-3d;position:relative}
+#tagFlip{transition:transform .55s cubic-bezier(.22,1,.36,1);transform-style:preserve-3d;position:relative;transform:rotateX(var(--ty,0deg)) rotateY(calc(var(--flip,0deg) + var(--tx,0deg)))}
 .tag .card{backface-visibility:hidden}
 .tag .card.back{position:absolute;inset:auto;top:64px;left:0;transform:rotateY(180deg);background:var(--pink)}
-.tag.flipped #tagFlip{transform:rotateY(180deg)}
+.tag.flipped #tagFlip{--flip:180deg}
 #svcPreview{position:fixed;width:230px;height:160px;z-index:700;pointer-events:none;opacity:0;transform:scale(.9) rotate(-3deg);transition:opacity .25s,transform .25s;overflow:hidden;box-shadow:0 26px 50px rgba(0,0,0,.35)}
 #svcPreview.on{opacity:1;transform:scale(1) rotate(-3deg)}
 #svcPreview img{width:100%;height:100%;object-fit:cover}
 .frame .mat{transition:transform .3s ease}
 .frame{cursor:zoom-in}
-@media(max-width:900px){#svcPreview{display:none}}
+@media(max-width:1150px){#svcPreview{display:none}}
 @media(max-width:900px){ nav.main-nav .ticket-btn{display:none} }
 
 section,.p-head,.finale{scroll-margin-top:104px}
+
+/* ---------- v3 additions (Dinesh, 19:06) ---------- */
+/* gallery cards: photo zoom + lift, LIVE stamp slides in */
+.frame .mat{overflow:hidden}
+.frame img{transition:transform .8s cubic-bezier(.22,1,.36,1)}
+.frame:hover img{transform:scale(1.07)}
+.frame .mat{transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .45s}
+.frame:hover .mat{transform:translateY(-8px)}
+.frame .stamp{opacity:0;transform:translateX(14px) rotate(-4deg);transition:opacity .4s,transform .45s cubic-bezier(.22,1,.36,1)}
+.frame:hover .stamp{opacity:1;transform:translateX(0) rotate(-4deg)}
+/* marquee ribbon */
+.band{background:var(--pink);color:var(--ink);overflow:hidden;transform:rotate(-1.4deg) scale(1.03);border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);position:relative;z-index:5;margin:10px 0 -6px}
+.band .track{display:flex;white-space:nowrap;width:max-content;animation:bandmove 26s linear infinite;font-family:var(--display);font-size:14.5px;padding:13px 0}
+@keyframes bandmove{to{transform:translateX(-50%)}}
+/* custom cursor */
+#cursor{position:fixed;left:0;top:0;width:12px;height:12px;border-radius:50%;background:var(--pink);z-index:1500;pointer-events:none;transform:translate(-50%,-50%);display:none;align-items:center;justify-content:center;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:var(--ink);transition:width .3s,height .3s,background .3s}
+@media(pointer:fine){ #cursor{display:flex} }
+#cursor.view{width:68px;height:68px}
+.frame{cursor:none}
+@media(prefers-reduced-motion:reduce){ .band .track{animation:none} }
