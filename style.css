@@ -47,15 +47,16 @@ nav.main-nav a.nl:hover::after{width:100%}
 #mnav a{font-family:var(--display);font-size:clamp(22px,7vw,34px);padding:8px 0;border-bottom:1px solid var(--line-l)}
 #mnavClose{position:absolute;top:20px;right:24px;background:none;border:0;color:var(--paper);font-size:26px;cursor:pointer}
 
-/* ---------- THE ENTRANCE HALL (home hero) ---------- */
-.door{min-height:100svh;background:linear-gradient(180deg,#f1ebdf 0%,#ece4d3 62%,#e3d9c3 100%);color:var(--ink);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;padding:132px 0 84px}
-.door::before,.door::after{content:'';position:absolute;top:-40px;width:420px;height:520px;background:radial-gradient(ellipse at 50% 0%,rgba(255,246,220,.85),rgba(255,246,220,0) 62%);pointer-events:none}
-.door::before{left:6%}.door::after{right:6%}
-.door .spot{position:absolute;inset:0;pointer-events:none;background:radial-gradient(600px circle at var(--mx,50%) var(--my,34%),rgba(242,205,207,.28),transparent 65%)}
-.door .floor{position:absolute;left:0;right:0;bottom:0;height:110px;background:linear-gradient(180deg,#d8cdb4,#c9bb9c);border-top:1px solid rgba(10,10,11,.18)}
-.door .wrap{position:relative;z-index:2}
-.art-frame{background:var(--ink);padding:13px;box-shadow:0 50px 90px rgba(30,24,12,.35),0 14px 28px rgba(30,24,12,.25);max-width:1060px;margin:0 auto;animation:hang 1.1s cubic-bezier(.22,1,.36,1) both}
-@keyframes hang{from{opacity:0;transform:translateY(-30px) rotate(-.5deg)}to{opacity:1;transform:none}}
+/* ---------- THE ENTRANCE HALL — scroll-dolly hero ---------- */
+.door{height:300vh;position:relative;background:#e9e1cf}
+.door .stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:linear-gradient(180deg,#f1ebdf 0%,#ece4d3 58%,#e0d5ba 100%);color:var(--ink)}
+.door .wallshade{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 42%,transparent 55%,rgba(59,45,20,.18) 100%);pointer-events:none;z-index:1}
+.door .stage::before,.door .stage::after{content:'';position:absolute;top:-40px;width:430px;height:540px;background:radial-gradient(ellipse at 50% 0%,rgba(255,246,220,.9),rgba(255,246,220,0) 62%);pointer-events:none;z-index:1}
+.door .stage::before{left:5%}.door .stage::after{right:5%}
+.door .spot{position:absolute;inset:0;pointer-events:none;background:radial-gradient(600px circle at var(--mx,50%) var(--my,34%),rgba(242,205,207,.30),transparent 65%);z-index:2}
+#dust{position:absolute;inset:0;z-index:2;pointer-events:none}
+.door .floor{position:absolute;left:0;right:0;bottom:0;height:15vh;background:linear-gradient(180deg,#d8cdb4,#c6b691);border-top:1px solid rgba(10,10,11,.18);z-index:0}
+.art-frame{position:absolute;left:50%;top:44%;width:min(1060px,92vw);transform:translate(-50%,-50%);background:var(--ink);padding:13px;box-shadow:0 50px 90px rgba(30,24,12,.35),0 14px 28px rgba(30,24,12,.25);z-index:3;will-change:transform}
 .art-frame .mat{background:#fffdf7;padding:clamp(28px,5vw,58px) clamp(22px,5vw,60px) clamp(24px,4vw,44px);position:relative}
 .door-word{font-family:var(--display);font-size:clamp(38px,7.6vw,104px);line-height:1;text-transform:uppercase;margin-top:20px}
 .door-word .row{display:block;overflow:hidden}
@@ -65,14 +66,17 @@ nav.main-nav a.nl:hover::after{width:100%}
 @keyframes rise{to{transform:translateY(0)}}
 .frame-meta{display:flex;justify-content:space-between;gap:22px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line);font-size:16.5px;flex-wrap:wrap}
 .frame-meta .fm-r{font-size:11.5px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:rgba(10,10,11,.55);padding-top:5px}
-.plaque{background:#fffdf7;border:1px solid rgba(10,10,11,.2);max-width:430px;margin:30px auto 0;padding:16px 20px 14px;text-align:center;box-shadow:0 16px 30px rgba(30,24,12,.14)}
-.plaque .pl-t{font-family:var(--display);font-size:14.5px}
-.plaque .pl-d{font-size:13.5px;color:rgba(10,10,11,.66);margin-top:5px;line-height:1.5}
-.door-cta{display:flex;justify-content:center;gap:16px;margin-top:26px;flex-wrap:wrap}
-.ticket-btn.big{font-size:14px;padding:15px 24px 14px}
-.ticket-btn.ink{background:var(--ink);color:var(--paper)}
-.ticket-btn.ink::before,.ticket-btn.ink::after{background:#e7ddc8}
-.scroll-cue{text-align:center;margin-top:30px;font-size:11px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:rgba(10,10,11,.5)}
+.side-frame{position:absolute;top:38%;width:190px;background:var(--ink);padding:8px 8px 0;z-index:2;box-shadow:0 30px 50px rgba(30,24,12,.3);will-change:transform,opacity}
+.side-frame img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.side-frame span{display:block;background:#fffdf7;font-size:11px;font-weight:600;letter-spacing:.14em;padding:7px 4px 8px;text-transform:uppercase}
+.sf-l{left:4.5%}.sf-r{right:4.5%}
+.stage-plaque{position:absolute;left:50%;bottom:12.5vh;transform:translateX(-50%);z-index:3;background:#fffdf7;border:1px solid rgba(10,10,11,.2);padding:10px 18px;font-size:13px;color:rgba(10,10,11,.75);box-shadow:0 14px 26px rgba(30,24,12,.13);white-space:nowrap}
+.hud{position:absolute;bottom:26px;z-index:5;display:flex;align-items:center;gap:14px}
+.hud-l{left:26px;font-size:11px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:rgba(10,10,11,.6)}
+.hud-bar{display:inline-block;width:110px;height:2px;background:rgba(10,10,11,.2);vertical-align:middle}
+#hudFill{display:block;height:100%;width:0;background:var(--pink-deep)}
+.hud-r{right:26px}
+.door .flash{position:absolute;inset:0;background:var(--pink);opacity:0;pointer-events:none;z-index:6}
 .tag{position:absolute;top:-58px;right:26px;z-index:4;transform-origin:50% -30px;animation:swing 5.5s ease-in-out infinite}
 @keyframes swing{0%,100%{transform:rotate(2.4deg)}50%{transform:rotate(-2.4deg)}}
 .tag .string{width:1.5px;height:52px;background:rgba(10,10,11,.45);margin:0 auto}
@@ -81,6 +85,7 @@ nav.main-nav a.nl:hover::after{width:100%}
 .tag .card .tt{font-weight:600;font-size:14.5px;line-height:1.3;margin-top:4px}
 .tag .card .ts{font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-top:8px;color:rgba(10,10,11,.55)}
 .tag .card.back{background:var(--pink)}
+@media(max-width:1100px){ .side-frame{display:none} }
 @media(max-width:900px){
   .door-word{font-size:8.6vw}
   .door .kicker{max-width:54%}
@@ -88,7 +93,13 @@ nav.main-nav a.nl:hover::after{width:100%}
   .tag .card{width:138px;padding:11px 12px 10px}
   .tag .string{height:40px}
   .frame-meta .fm-r{display:none}
-  .door{padding-top:112px}
+  .stage-plaque{display:none}
+  .art-frame{top:42%}
+}
+@media(prefers-reduced-motion:reduce){
+  .door{height:auto}
+  .door .stage{position:static;height:auto;min-height:100svh;padding:120px 0 80px}
+  .art-frame{position:relative;left:auto;top:auto;transform:none;margin:0 auto}
 }
 
 /* ---------- MANIFESTO ---------- */

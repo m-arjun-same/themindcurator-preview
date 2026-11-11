@@ -14,8 +14,11 @@
 <div id="lbPrevZone"></div>
 <div id="mnav"><button id="mnavClose" aria-label="Close">✕</button><a href="index.html">Home</a><a href="our-work.html">Gallery</a><a href="services.html">Services</a><a href="studio.html">The Curators</a><a href="contact.html">Visit</a></div>
 
-<section class="door"><div class="spot"></div><div class="floor"></div><div class="wrap" style="width:100%">
-  <div class="art-frame reveal in">
+<section class="door"><div class="stage">
+  <div class="wallshade"></div><div class="spot"></div><canvas id="dust"></canvas><div class="floor"></div>
+  <aside class="side-frame sf-l"><img src="assets/img/paradise-1.jpg" alt="Paradise Restaurant exhibit"><span>№ 02 — Paradise</span></aside>
+  <aside class="side-frame sf-r"><img src="assets/img/alessandro-1.webp" alt="Alessandro Pet Spa exhibit"><span>№ 01 — Alessandro</span></aside>
+  <div class="art-frame" id="heroFrame">
     <div class="mat">
       <div class="tag"><div class="string"></div><div class="card"><div class="tn">ADMISSION</div><div class="tt">One DM.<br>No queues.</div><div class="ts">Ticket № 000</div></div></div>
       <p class="kicker"><span class="no">NOW SHOWING</span> — PERMANENT EXHIBITION · HYDERABAD</p>
@@ -23,9 +26,10 @@
       <div class="frame-meta"><span>We curate your business into a website people remember.</span><span class="fm-r">EST. 2026 · SIX LIVE EXHIBITS INSIDE</span></div>
     </div>
   </div>
-  <div class="plaque reveal"><p class="pl-t">“The Mind Curator”, 2026</p><p class="pl-d">Websites, light &amp; nerve — a working studio, on permanent display. Every piece inside is live; walk in and touch them.</p></div>
-  <div class="door-cta reveal"><a class="ticket-btn big" href="our-work.html">Enter the gallery</a><a class="ticket-btn big ink" href="https://ig.me/m/themindcurator_studio" target="_blank" rel="noopener">DM 'START'</a></div>
-  <p class="scroll-cue">Scroll — the gallery continues ↓</p>
+  <div class="stage-plaque"><p>“The Mind Curator”, 2026 — websites, light &amp; nerve. On permanent display.</p></div>
+  <div class="hud hud-l"><span id="hudText">Scroll to walk in</span><span class="hud-bar"><span id="hudFill"></span></span></div>
+  <div class="hud hud-r"><a class="ticket-btn" href="https://ig.me/m/themindcurator_studio" target="_blank" rel="noopener">DM 'START'</a></div>
+  <div class="flash"></div>
 </div></section>
 <section class="manifesto"><div class="wrap">
   <p class="kicker"><span class="no">№ 00</span> — THE MANIFESTO</p>
@@ -71,7 +75,7 @@
     <div class="stat"><div class="n"><span data-count="100">0</span><em>%</em></div><p>Own code. Nothing mass-produced</p></div>
   </div>
 </div></section>
-<div id="roomChip">ROOM 01 — THE DOOR</div>
+<div id="roomChip">ROOM 01 — THE ENTRANCE HALL</div>
 <section class="finale"><div class="wrap">
   <p class="kicker">NEXT ACQUISITION</p>
   <h2>Exhibit № 07<br><span class="outline" style="-webkit-text-stroke-color:var(--ink)">could be yours.</span></h2>
