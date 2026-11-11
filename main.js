@@ -71,9 +71,9 @@ function openLB(i){
   lbT.textContent=(f.querySelector('.pn')||{}).textContent||'';
   lbM.textContent=(f.querySelector('.pm')||{}).textContent||'';
   lbL.href=a?a.href:'#';
-  lb.classList.add('open'); document.body.style.overflow='hidden';
+  lb.classList.add('open'); document.body.style.overflow='hidden'; if(lenis) lenis.stop();
 }
-function closeLB(){ lb&&lb.classList.remove('open'); document.body.style.overflow=''; }
+function closeLB(){ lb&&lb.classList.remove('open'); document.body.style.overflow=''; if(lenis) lenis.start(); }
 frames.forEach(function(f,i){ f.addEventListener('click',function(e){ e.preventDefault(); openLB(i); });
   /* per-frame pointer tilt */
   f.addEventListener('pointermove',function(e){ var r=f.getBoundingClientRect();
@@ -126,22 +126,12 @@ if(chip){
   var rio=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ var r=rooms.find(function(x){ return en.target.matches(x[0]); }); if(r) chip.innerHTML=r[1].replace('№','<em>№</em>'); } }); },{threshold:.35});
   rooms.forEach(function(r){ var el=document.querySelector(r[0]); el&&rio.observe(el); });
 }
-/* Lenis-style smooth scrolling — desktop pointers only, reduced-motion respected */
-var fine=matchMedia('(pointer:fine)').matches, calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
-if(fine&&!calm){
-  var tY=scrollY, cY=scrollY, rolling=false;
-  function maxY(){ return document.documentElement.scrollHeight-innerHeight; }
-  function roll(){ var d=tY-cY; if(Math.abs(d)<.4){ cY=tY; scrollTo(0,cY); rolling=false; return; }
-    cY+=d*.085; scrollTo(0,cY); requestAnimationFrame(roll); }
-  addEventListener('wheel',function(e){
-    if(lb&&lb.classList.contains('open')) return;
-    if(e.ctrlKey) return;
-    e.preventDefault();
-    var dy=e.deltaMode===1? e.deltaY*33 : e.deltaY;
-    tY=Math.max(0,Math.min(maxY(),tY+dy));
-    if(!rolling){ rolling=true; cY=scrollY; requestAnimationFrame(roll); }
-  },{passive:false});
-  addEventListener('scroll',function(){ if(!rolling){ tY=scrollY; cY=scrollY; } },{passive:true});
+/* Lenis smooth scrolling (real library, vendored) — gallery-slow glide */
+var lenis=null;
+if(window.Lenis && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+  lenis=new Lenis({ lerp:.09, wheelMultiplier:1, smoothWheel:true });
+  (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
+  lenis.on('scroll',function(){ if(!window.__tick){ window.__tick=true; requestAnimationFrame(function(){ light(); tilt(); window.__tick=false; }); } });
 }
 /* custom cursor — dot that grows to VIEW over gallery cards */
 var cur2=document.createElement('div'); cur2.id='cursor'; document.body.appendChild(cur2);
