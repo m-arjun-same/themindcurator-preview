@@ -122,7 +122,7 @@ document.querySelectorAll('.big-ticket,.ticket-btn').forEach(function(b){
 if(document.querySelector('.door')) document.body.classList.add('home');
 var chip=document.getElementById('roomChip');
 if(chip){
-  var rooms=[['.door','ROOM 01 — THE DOOR'],['.manifesto','ROOM 02 — MANIFESTO'],['.wall-sec','ROOM 03 — THE GALLERY WALL'],['.labels','ROOM 04 — WALL LABELS'],['.curators','ROOM 05 — THE CURATORS'],['.finale','ROOM 06 — EXHIBIT № 07']];
+  var rooms=[['.door','ROOM 01 — THE ENTRANCE HALL'],['.manifesto','ROOM 02 — MANIFESTO'],['.wall-sec','ROOM 03 — THE GALLERY WALL'],['.labels','ROOM 04 — WALL LABELS'],['.curators','ROOM 05 — THE CURATORS'],['.finale','ROOM 06 — EXHIBIT № 07']];
   var rio=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ var r=rooms.find(function(x){ return en.target.matches(x[0]); }); if(r) chip.innerHTML=r[1].replace('№','<em>№</em>'); } }); },{threshold:.35});
   rooms.forEach(function(r){ var el=document.querySelector(r[0]); el&&rio.observe(el); });
 }
