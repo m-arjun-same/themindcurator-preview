@@ -122,7 +122,7 @@ document.querySelectorAll('.big-ticket,.ticket-btn').forEach(function(b){
 if(document.querySelector('.door')) document.body.classList.add('home');
 var chip=document.getElementById('roomChip');
 if(chip){
-  var rooms=[['.door','ROOM 01 — THE ENTRANCE HALL'],['.manifesto','ROOM 02 — MANIFESTO'],['.wall-sec','ROOM 03 — THE GALLERY WALL'],['.labels','ROOM 04 — WALL LABELS'],['.curators','ROOM 05 — THE CURATORS'],['.finale','ROOM 06 — EXHIBIT № 07']];
+  var rooms=[['.door','ROOM 01 — THE MONUMENT'],['.manifesto','ROOM 02 — MANIFESTO'],['.wall-sec','ROOM 03 — THE GALLERY WALL'],['.labels','ROOM 04 — WALL LABELS'],['.curators','ROOM 05 — THE CURATORS'],['.finale','ROOM 06 — EXHIBIT № 07']];
   var rio=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ var r=rooms.find(function(x){ return en.target.matches(x[0]); }); if(r) chip.innerHTML=r[1].replace('№','<em>№</em>'); } }); },{threshold:.35});
   rooms.forEach(function(r){ var el=document.querySelector(r[0]); el&&rio.observe(el); });
 }
@@ -140,55 +140,14 @@ addEventListener('pointermove',function(e){ tx2=e.clientX; ty2=e.clientY; });
 (function follow(){ cx+=(tx2-cx)*.2; cy+=(ty2-cy)*.2; cur2.style.left=cx+'px'; cur2.style.top=cy+'px'; requestAnimationFrame(follow); })();
 frames.forEach(function(f){ f.addEventListener('pointerenter',function(){ cur2.classList.add('view'); cur2.textContent='VIEW'; });
   f.addEventListener('pointerleave',function(){ cur2.classList.remove('view'); cur2.textContent=''; }); });
-/* Entrance Hall — scroll dolly through the frame + dust + pointer parallax */
-var doorSec=document.querySelector('.door'), stage=doorSec&&doorSec.querySelector('.stage'),
-    hFrame=document.getElementById('heroFrame'), hudFill=document.getElementById('hudFill'),
-    hudText=document.getElementById('hudText'), flash=doorSec&&doorSec.querySelector('.flash'),
-    sfL=doorSec&&doorSec.querySelector('.sf-l'), sfR=doorSec&&doorSec.querySelector('.sf-r'),
-    plaque=doorSec&&doorSec.querySelector('.stage-plaque'), hudR=doorSec&&doorSec.querySelector('.hud-r');
-var px=0, py=0;
-if(stage){ stage.addEventListener('pointermove',function(e){ var r=stage.getBoundingClientRect();
-  px=((e.clientX-r.left)/r.width-.5); py=((e.clientY-r.top)/r.height-.5); }); }
-function heroLoop(){
-  if(doorSec&&hFrame){
-    var r=doorSec.getBoundingClientRect();
-    if(r.bottom>0&&r.top<innerHeight){
-      var total=doorSec.offsetHeight-innerHeight;
-      var p=Math.min(1,Math.max(0,-r.top/Math.max(1,total)));
-      var sc=.86+ (Math.pow(p,1.35))*5.6;
-      hFrame.style.transform='translate(calc(-50% + '+(px*-14)+'px), calc(-50% + '+(py*-10)+'px)) scale('+sc.toFixed(3)+')';
-      if(sfL){ sfL.style.transform='translate('+(px*18 - p*46)+'vw, '+(py*12)+'px)'; sfL.style.opacity=Math.max(0,1-p*1.7); }
-      if(sfR){ sfR.style.transform='translate('+(px*18 + p*46)+'vw, '+(py*12)+'px)'; sfR.style.opacity=Math.max(0,1-p*1.7); }
-      if(flash) flash.style.opacity=Math.max(0,(p-.88)/.12)*.92;
-      if(hudFill) hudFill.style.width=(p*100)+'%';
-      if(hudText) hudText.textContent = p>.92 ? 'Welcome in' : (p>.06 ? 'Walking in…' : 'Scroll to walk in');
-      if(plaque) plaque.style.opacity=Math.max(0,1-p*3);
-      if(hudR) hudR.style.opacity=Math.max(0,1-p*2.4);
-      var tag=doorSec.querySelector('.tag'); if(tag) tag.style.opacity=Math.max(0,1-p*2.2);
-    }
-  }
-  requestAnimationFrame(heroLoop);
-}
-requestAnimationFrame(heroLoop);
-/* dust motes in the gallery light */
-var dc=document.getElementById('dust');
-if(dc&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-  var ctx=dc.getContext('2d'), W=0, H=0, motes=[];
-  function sizeDc(){ W=dc.width=dc.offsetWidth; H=dc.height=dc.offsetHeight; }
-  sizeDc(); addEventListener('resize',sizeDc);
-  for(var i=0;i<55;i++) motes.push({x:Math.random(),y:Math.random(),r:.6+Math.random()*1.7,s:.008+Math.random()*.02,o:.12+Math.random()*.3,ph:Math.random()*6.28});
-  (function drawDust(t){
-    if(doorSec){ var r=doorSec.getBoundingClientRect();
-      if(r.bottom>0&&r.top<innerHeight){
-        ctx.clearRect(0,0,W,H);
-        motes.forEach(function(m){ m.y-=m.s/100; if(m.y<-.02){ m.y=1.02; m.x=Math.random(); }
-          var tw=.6+.4*Math.sin(t/900+m.ph);
-          ctx.beginPath(); ctx.arc((m.x+Math.sin(t/2400+m.ph)*.006)*W, m.y*H, m.r, 0, 6.29);
-          ctx.fillStyle='rgba(120,90,30,'+(m.o*tw)+')'; ctx.fill(); });
-      } }
-    requestAnimationFrame(drawDust);
-  })(0);
-}
+/* Monument hero — slow parallax as you leave it */
+var heroBg=document.querySelector('.hero-bg'), heroIn=document.querySelector('.hero-in');
+addEventListener('scroll',function(){
+  if(!heroBg) return;
+  var y=scrollY; if(y>innerHeight*1.2) return;
+  heroBg.style.transform='translateY('+(y*.32)+'px)';
+  if(heroIn){ heroIn.style.transform='translateY('+(y*.12)+'px)'; heroIn.style.opacity=Math.max(0,1-y/(innerHeight*.85)); }
+},{passive:true});
 /* Hyderabad clock */
 var clk=document.getElementById('hydClock');
 function tickClock(){
